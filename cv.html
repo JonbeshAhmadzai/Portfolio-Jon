@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV | Jonbesh Ahmadzai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .cv-page {
+        padding: 48px 0;
+        position: relative;
+        z-index: 1;
+      }
+
+      .cv-document {
+        background: #fff;
+        border-radius: 10px;
+        color: #0f172a;
+        margin: 0 auto;
+        max-width: 920px;
+        padding: 52px;
+      }
+
+      .cv-top {
+        align-items: start;
+        border-bottom: 2px solid #e2e8f0;
+        display: flex;
+        gap: 24px;
+        justify-content: space-between;
+        padding-bottom: 28px;
+      }
+
+      .cv-top h1 {
+        font-size: 2.5rem;
+        letter-spacing: 0;
+        margin: 0;
+      }
+
+      .cv-top p {
+        color: #334155;
+        line-height: 1.65;
+        margin: 12px 0 0;
+        max-width: 560px;
+      }
+
+      .cv-contact {
+        color: #475569;
+        display: grid;
+        font-size: 0.9rem;
+        gap: 7px;
+        min-width: 210px;
+      }
+
+      .cv-section {
+        border-bottom: 1px solid #e2e8f0;
+        padding: 28px 0;
+      }
+
+      .cv-section:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .cv-section h2 {
+        color: #0369a1;
+        font-size: 0.9rem;
+        letter-spacing: 0.18em;
+        margin: 0 0 16px;
+        text-transform: uppercase;
+      }
+
+      .cv-item {
+        margin-bottom: 20px;
+      }
+
+      .cv-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .cv-item h3 {
+        margin: 0;
+      }
+
+      .cv-item time {
+        color: #64748b;
+        display: block;
+        font-size: 0.9rem;
+        margin-top: 4px;
+      }
+
+      .cv-item p,
+      .cv-item li {
+        color: #334155;
+        line-height: 1.65;
+      }
+
+      .cv-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 0;
+      }
+
+      .cv-tags li {
+        background: #e0f2fe;
+        border-radius: 999px;
+        color: #075985;
+        display: inline-flex;
+        font-size: 0.86rem;
+        font-weight: 700;
+        padding: 7px 11px;
+      }
+
+      .cv-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-bottom: 24px;
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+
+        .site-header,
+        .cv-actions,
+        .ambient,
+        .grid-glow {
+          display: none;
+        }
+
+        .cv-page {
+          padding: 0;
+        }
+
+        .cv-document {
+          border-radius: 0;
+          box-shadow: none;
+          max-width: none;
+          padding: 0;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .cv-document {
+          padding: 28px;
+        }
+
+        .cv-top {
+          display: grid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="ambient ambient-one"></div>
+      <div class="ambient ambient-two"></div>
+      <div class="grid-glow"></div>
+
+      <header class="site-header">
+        <nav class="nav container" aria-label="CV navigation">
+          <a class="brand" href="index.html#home">
+            <span class="brand-mark">AI</span>
+            <span>Back to Portfolio</span>
+          </a>
+        </nav>
+      </header>
+
+      <main class="cv-page container">
+        <div class="cv-actions">
+          <button class="button button-primary" onclick="window.print()">Download / Print PDF</button>
+          <a class="button button-outline" href="index.html#contact">Contact</a>
+        </div>
+
+        <article class="cv-document">
+          <header class="cv-top">
+            <div>
+              <h1>Jonbesh Ahmadzai</h1>
+              <p>
+                AI & Data Professional focused on machine learning workflows, production-grade
+                pipelines, cloud systems, APIs, analytics, and business-ready data products.
+              </p>
+            </div>
+            <div class="cv-contact">
+              <span>Brussels, Belgium</span>
+              <span>jonbesh.ahmadzai@gmail.com</span>
+              <span>github.com/JonbeshAhmadzai</span>
+              <span>linkedin.com/in/jonbesh-a-60b678109</span>
+            </div>
+          </header>
+
+          <section class="cv-section">
+            <h2>Profile</h2>
+            <p>
+              I build AI and data solutions for real-world use cases: machine learning workflows,
+              multi-threaded scraping, Azure-backed state tracking, containerized FastAPI services,
+              Power BI dashboards, and geospatial ML systems. I combine technical delivery with a
+              Business Management and Marketing background, so my work stays connected to stakeholder
+              decisions.
+            </p>
+          </section>
+
+          <section class="cv-section">
+            <h2>Projects</h2>
+            <div class="cv-item">
+              <h3>Market Watch Agent</h3>
+              <p>Built for ING via BeCode: automated competitor banking-product monitoring with LLM classification, JSON diffing, and Azure Blob Storage state tracking.</p>
+            </div>
+            <div class="cv-item">
+              <h3>Immovlan Multi-Threaded Scraping Pipeline</h3>
+              <p>Collected 23,000+ Belgian property listings with concurrent scraping, structured parsing, deduplication, and normalized analysis-ready outputs.</p>
+            </div>
+            <div class="cv-item">
+              <h3>Belgian Real Estate ML API</h3>
+              <p>Trained regression model on scraped Immovlan data and deployed a Dockerized FastAPI prediction endpoint on Render.</p>
+            </div>
+            <div class="cv-item">
+              <h3>Dragonyte Brewery BI Case Study</h3>
+              <p>Accenture Belgium case study: star-schema Power BI model with 15+ DAX measures and a 4-page executive dashboard.</p>
+            </div>
+            <div class="cv-item">
+              <h3>Satellite Crop Classification Pipeline</h3>
+              <p>Sentinel-2 and Azure Blob Storage geospatial ML pipeline with cloud masking, 117 engineered features, Random Forest classification, and GeoTIFF export.</p>
+            </div>
+          </section>
+
+          <section class="cv-section">
+            <h2>Skills</h2>
+            <ul class="cv-tags">
+              <li>Python</li>
+              <li>SQL</li>
+              <li>Azure</li>
+              <li>OpenAI</li>
+              <li>Pandas</li>
+              <li>Power BI</li>
+              <li>Streamlit</li>
+              <li>Docker</li>
+              <li>Git</li>
+              <li>FastAPI</li>
+              <li>GeoPandas</li>
+              <li>Web Scraping</li>
+              <li>ETL</li>
+              <li>Azure Blob Storage</li>
+              <li>DAX</li>
+            </ul>
+          </section>
+
+          <section class="cv-section">
+            <h2>Experience</h2>
+            <div class="cv-item">
+              <h3>Data & AI Trainee</h3>
+              <time>BeCode, Brussels · Feb 2026 - Present</time>
+              <p>Building production data pipelines, scraping systems, containerized APIs, Power BI dashboards, cloud-integrated agents, and AI-powered classification workflows for client-facing projects.</p>
+            </div>
+            <div class="cv-item">
+              <h3>Marketing & Sales Associate</h3>
+              <time>GOGI, Brussels · Jul 2024 - May 2025</time>
+              <p>Analyzed customer engagement and consumer behavior to refine targeting, support sales decisions, and maintain performance reporting.</p>
+            </div>
+          </section>
+
+          <section class="cv-section">
+            <h2>Education</h2>
+            <div class="cv-item">
+              <h3>BSc Business Management</h3>
+              <time>Odisee University, Brussels · 2020 - 2024</time>
+              <p>Business strategy, marketing, customer insight, and analytics foundation.</p>
+            </div>
+            <div class="cv-item">
+              <h3>BBA</h3>
+              <time>KU Leuven Brussels · 2018 - 2020</time>
+            </div>
+            <div class="cv-item">
+              <h3>IB Diploma</h3>
+              <time>Eastern Mediterranean International School · 2014 - 2016</time>
+            </div>
+          </section>
+
+          <section class="cv-section">
+            <h2>Certifications</h2>
+            <p>SQL · Analyzing & Visualizing Data with Microsoft Excel · AWS Cloud Practitioner (In Progress) · Microsoft Azure Data Engineer (In Progress)</p>
+          </section>
+
+          <section class="cv-section">
+            <h2>Languages</h2>
+            <p>English (C2) · Persian (C2) · Turkish (C1) · Urdu (C1) · French (B2) · Spanish (A2)</p>
+          </section>
+        </article>
+      </main>
+    </div>
+  </body>
+</html>
