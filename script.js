@@ -54,6 +54,16 @@ const trackAnalyticsEvent = (eventName, params = {}) => {
 
 const getCleanText = (element) => element?.textContent?.replace(/\s+/g, " ").trim() || "";
 const getProjectName = (element) => getCleanText(element.closest(".project-card")?.querySelector("h3"));
+const siteVersion = "portfolio-2026-05-28";
+
+const getEstimatedDeviceType = () => {
+  const width = window.innerWidth;
+  const hasCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+
+  if (width < 768 && hasCoarsePointer) return "mobile";
+  if (width < 1100 && hasCoarsePointer) return "tablet";
+  return "desktop";
+};
 
 const campaignParams = new URLSearchParams(window.location.search);
 const campaignData = {};
@@ -69,6 +79,18 @@ if (Object.keys(campaignData).length > 0) {
 trackAnalyticsEvent("portfolio_open", {
   page_path: window.location.pathname,
   page_title: document.title,
+  referrer: document.referrer || "direct",
+});
+
+trackAnalyticsEvent("visitor_context", {
+  app_version: siteVersion,
+  estimated_device_type: getEstimatedDeviceType(),
+  viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+  screen_size: `${window.screen.width}x${window.screen.height}`,
+  device_pixel_ratio: window.devicePixelRatio || 1,
+  language: navigator.language || "unknown",
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "unknown",
+  color_scheme: window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light",
   referrer: document.referrer || "direct",
 });
 
