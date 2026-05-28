@@ -46,35 +46,43 @@ document.querySelectorAll(".nav-links a").forEach((link) => {
   });
 });
 
-document.querySelectorAll(".pipeline-flow li").forEach((step) => {
-  const title = step.querySelector("strong")?.textContent?.trim() || "pipeline step";
+document.querySelectorAll(".diagram-card").forEach((card) => {
+  const title = card.querySelector("h4")?.textContent?.trim() || "pipeline card";
+  const diagramLink = card.querySelector(".diagram-head a");
 
-  step.setAttribute("tabindex", "0");
-  step.setAttribute("role", "button");
-  step.setAttribute("aria-expanded", "false");
-  step.setAttribute("aria-label", `Expand ${title} step`);
+  card.setAttribute("tabindex", "0");
+  card.setAttribute("role", "button");
+  card.setAttribute("aria-expanded", "false");
+  card.setAttribute("aria-label", `Expand ${title}`);
 
-  const toggleStep = () => {
-    const flow = step.closest(".pipeline-flow");
-    const isExpanded = step.classList.contains("is-expanded");
+  diagramLink?.addEventListener("click", (event) => event.stopPropagation());
 
-    flow.querySelectorAll("li").forEach((item) => {
+  const toggleCard = () => {
+    const grid = card.closest(".diagram-grid");
+    const isExpanded = card.classList.contains("is-expanded");
+
+    grid.querySelectorAll(".diagram-card").forEach((item) => {
       item.classList.remove("is-expanded");
       item.setAttribute("aria-expanded", "false");
     });
 
     if (!isExpanded) {
-      step.classList.add("is-expanded");
-      step.setAttribute("aria-expanded", "true");
-      step.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      card.classList.add("is-expanded");
+      card.setAttribute("aria-expanded", "true");
+      card.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   };
 
-  step.addEventListener("click", toggleStep);
-  step.addEventListener("keydown", (event) => {
+  card.addEventListener("click", (event) => {
+    if (!event.target.closest("a")) {
+      toggleCard();
+    }
+  });
+
+  card.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      toggleStep();
+      toggleCard();
     }
   });
 });

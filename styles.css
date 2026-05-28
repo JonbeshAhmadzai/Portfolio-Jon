@@ -929,14 +929,61 @@ pre {
 }
 
 .diagram-grid {
-  display: grid;
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
-  grid-template-columns: 1fr;
 }
 
 .diagram-card {
+  cursor: pointer;
+  max-width: 100%;
   overflow: hidden;
   padding: 24px;
+  position: relative;
+  transition:
+    width 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease,
+    box-shadow 220ms ease;
+  width: min(660px, 100%);
+}
+
+.diagram-card::after {
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.08));
+  content: "";
+  inset: 0 0 0 auto;
+  opacity: 0.76;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 220ms ease;
+  width: 90px;
+}
+
+.diagram-card:hover,
+.diagram-card:focus-visible,
+.diagram-card:focus-within,
+.diagram-card.is-expanded {
+  background: rgba(15, 23, 42, 0.74);
+  border-color: rgba(56, 189, 248, 0.24);
+  box-shadow: 0 24px 64px rgba(14, 165, 233, 0.1);
+  transform: translateY(-3px);
+  width: 100%;
+}
+
+.diagram-card:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(56, 189, 248, 0.18),
+    0 24px 64px rgba(14, 165, 233, 0.1);
+}
+
+.diagram-card:hover::after,
+.diagram-card:focus-visible::after,
+.diagram-card:focus-within::after,
+.diagram-card.is-expanded::after {
+  opacity: 0;
 }
 
 .diagram-head {
@@ -976,92 +1023,39 @@ pre {
 
 .pipeline-flow {
   counter-reset: pipeline-step;
-  display: flex;
+  display: grid;
   gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   list-style: none;
   margin: 0;
-  overflow-x: auto;
-  overflow-y: visible;
-  padding: 2px 4px 10px;
-  scrollbar-color: rgba(56, 189, 248, 0.42) rgba(15, 23, 42, 0.5);
-  scrollbar-width: thin;
-}
-
-.pipeline-flow::-webkit-scrollbar {
-  height: 8px;
-}
-
-.pipeline-flow::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.5);
-  border-radius: 999px;
-}
-
-.pipeline-flow::-webkit-scrollbar-thumb {
-  background: rgba(56, 189, 248, 0.34);
-  border-radius: 999px;
+  padding: 0;
 }
 
 .pipeline-flow li {
   background: rgba(2, 8, 23, 0.54);
   border: 1px solid rgba(148, 163, 184, 0.08);
   border-radius: 8px;
-  cursor: pointer;
-  flex: 1 1 0;
   min-height: 170px;
-  min-width: 148px;
-  outline: none;
-  overflow: hidden;
   padding: 16px;
   position: relative;
-  scroll-snap-align: start;
   transition:
     background 220ms ease,
-    border-color 220ms ease,
-    box-shadow 220ms ease,
-    flex-grow 260ms ease,
-    min-width 260ms ease,
-    transform 220ms ease;
+    border-color 220ms ease;
 }
 
-.pipeline-flow li::after {
-  border-right: 1.5px solid rgba(56, 189, 248, 0.82);
-  border-top: 1.5px solid rgba(56, 189, 248, 0.82);
-  content: "";
-  height: 8px;
-  opacity: 0.42;
-  position: absolute;
-  right: 18px;
-  top: 20px;
-  transform: rotate(45deg);
-  transition:
-    opacity 220ms ease,
-    transform 220ms ease;
-  width: 8px;
+.diagram-card:hover .pipeline-flow,
+.diagram-card:focus-visible .pipeline-flow,
+.diagram-card:focus-within .pipeline-flow,
+.diagram-card.is-expanded .pipeline-flow {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
-.pipeline-flow li:hover,
-.pipeline-flow li:focus-visible,
-.pipeline-flow li.is-expanded {
-  background: rgba(15, 23, 42, 0.86);
-  border-color: rgba(56, 189, 248, 0.36);
-  box-shadow: 0 22px 54px rgba(14, 165, 233, 0.12);
-  flex-grow: 2.35;
-  min-width: 300px;
-  transform: translateY(-3px);
-  z-index: 2;
-}
-
-.pipeline-flow li:focus-visible {
-  box-shadow:
-    0 0 0 3px rgba(56, 189, 248, 0.18),
-    0 22px 54px rgba(14, 165, 233, 0.12);
-}
-
-.pipeline-flow li:hover::after,
-.pipeline-flow li:focus-visible::after,
-.pipeline-flow li.is-expanded::after {
-  opacity: 1;
-  transform: translateX(3px) rotate(45deg);
+.diagram-card:hover .pipeline-flow li,
+.diagram-card:focus-visible .pipeline-flow li,
+.diagram-card:focus-within .pipeline-flow li,
+.diagram-card.is-expanded .pipeline-flow li {
+  background: rgba(2, 8, 23, 0.62);
+  border-color: rgba(56, 189, 248, 0.16);
 }
 
 .pipeline-flow li::before {
@@ -1090,21 +1084,17 @@ pre {
 
 .pipeline-flow p {
   color: var(--muted);
-  display: -webkit-box;
   font-size: 0.84rem;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
   line-height: 1.55;
   margin: 0;
-  overflow: hidden;
   transition: color 220ms ease;
 }
 
-.pipeline-flow li:hover p,
-.pipeline-flow li:focus-visible p,
-.pipeline-flow li.is-expanded p {
+.diagram-card:hover .pipeline-flow p,
+.diagram-card:focus-visible .pipeline-flow p,
+.diagram-card:focus-within .pipeline-flow p,
+.diagram-card.is-expanded .pipeline-flow p {
   color: var(--text);
-  -webkit-line-clamp: 8;
 }
 
 .note-grid {
@@ -1365,24 +1355,24 @@ pre {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .diagram-grid,
   .note-grid,
   .certification-card {
     grid-template-columns: 1fr;
   }
 
+  .diagram-card {
+    width: 100%;
+  }
+
   .pipeline-flow {
-    scroll-snap-type: x proximity;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .pipeline-flow li {
-    flex: 0 0 220px;
-  }
-
-  .pipeline-flow li:hover,
-  .pipeline-flow li:focus-visible,
-  .pipeline-flow li.is-expanded {
-    flex-basis: 340px;
+  .diagram-card:hover .pipeline-flow,
+  .diagram-card:focus-visible .pipeline-flow,
+  .diagram-card:focus-within .pipeline-flow,
+  .diagram-card.is-expanded .pipeline-flow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -1472,26 +1462,18 @@ pre {
   }
 
   .pipeline-flow {
-    display: grid;
     grid-template-columns: 1fr;
-    overflow: visible;
-    padding: 0;
-    scroll-snap-type: none;
+  }
+
+  .diagram-card:hover .pipeline-flow,
+  .diagram-card:focus-visible .pipeline-flow,
+  .diagram-card:focus-within .pipeline-flow,
+  .diagram-card.is-expanded .pipeline-flow {
+    grid-template-columns: 1fr;
   }
 
   .pipeline-flow li {
-    cursor: default;
-    flex: initial;
     min-height: 0;
-    min-width: 0;
-  }
-
-  .pipeline-flow li:hover,
-  .pipeline-flow li:focus-visible,
-  .pipeline-flow li.is-expanded {
-    flex-basis: auto;
-    min-width: 0;
-    transform: none;
   }
 
   pre {
