@@ -52,14 +52,47 @@ const trackAnalyticsEvent = (eventName, params = {}) => {
   }
 };
 
+const getCleanText = (element) => element?.textContent?.replace(/\s+/g, " ").trim() || "";
+const getProjectName = (element) => getCleanText(element.closest(".project-card")?.querySelector("h3"));
+
+const campaignParams = new URLSearchParams(window.location.search);
+const campaignData = {};
+["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach((key) => {
+  const value = campaignParams.get(key);
+  if (value) campaignData[key] = value;
+});
+
+if (Object.keys(campaignData).length > 0) {
+  trackAnalyticsEvent("campaign_link_open", campaignData);
+}
+
+trackAnalyticsEvent("portfolio_open", {
+  page_path: window.location.pathname,
+  page_title: document.title,
+  referrer: document.referrer || "direct",
+});
+
 document.querySelectorAll("a[href]").forEach((link) => {
   link.addEventListener("click", () => {
     const href = link.getAttribute("href") || "";
-    const label = link.getAttribute("aria-label") || link.textContent.trim() || href;
+    const label = link.getAttribute("aria-label") || getCleanText(link) || href;
+    const projectName = getProjectName(link);
     const eventParams = {
       link_text: label,
       link_url: href,
     };
+
+    if (projectName) {
+      eventParams.project_name = projectName;
+    }
+
+    if (link.closest(".nav-links") || link.classList.contains("brand") || link.classList.contains("back-top")) {
+      trackAnalyticsEvent("navigation_click", {
+        ...eventParams,
+        target_section: href.startsWith("#") ? href.slice(1) : href,
+      });
+      return;
+    }
 
     if (href.includes("Jonbesh_ahmadzai_CV.pdf")) {
       trackAnalyticsEvent("cv_pdf_open", eventParams);
@@ -67,7 +100,10 @@ document.querySelectorAll("a[href]").forEach((link) => {
     }
 
     if (href.includes("github.com")) {
-      trackAnalyticsEvent(link.closest(".project-card") ? "project_github_click" : "github_profile_click", eventParams);
+      trackAnalyticsEvent(projectName ? "project_github_click" : "github_profile_click", {
+        ...eventParams,
+        link_type: projectName ? label.toLowerCase() : "profile",
+      });
       return;
     }
 
@@ -83,8 +119,73 @@ document.querySelectorAll("a[href]").forEach((link) => {
 
     if (href.endsWith(".svg")) {
       trackAnalyticsEvent("pipeline_diagram_open", eventParams);
+      return;
+    }
+
+    if (href.startsWith("#")) {
+      trackAnalyticsEvent("anchor_click", {
+        ...eventParams,
+        target_section: href.slice(1),
+      });
     }
   });
+});
+
+document.querySelectorAll(".case-study").forEach((caseStudy) => {
+  caseStudy.addEventListener("toggle", () => {
+    if (caseStudy.open) {
+      trackAnalyticsEvent("case_study_open", {
+        case_study_title: getCleanText(caseStudy.querySelector("h3")),
+      });
+    }
+  });
+});
+
+const sectionObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        trackAnalyticsEvent("section_view", {
+          section_id: entry.target.id,
+          section_title: getCleanText(entry.target.querySelector("h2, h3, .portfolio-label")) || entry.target.id,
+        });
+        sectionObserver.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.42 }
+);
+
+document.querySelectorAll("main section[id]").forEach((section) => sectionObserver.observe(section));
+
+const scrollMilestones = [25, 50, 75, 90, 100];
+const reachedScrollMilestones = new Set();
+
+const trackScrollDepth = () => {
+  const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if (scrollableHeight <= 0) return;
+
+  const scrollPercent = Math.min(100, Math.round((window.scrollY / scrollableHeight) * 100));
+
+  scrollMilestones.forEach((milestone) => {
+    if (scrollPercent >= milestone && !reachedScrollMilestones.has(milestone)) {
+      reachedScrollMilestones.add(milestone);
+      trackAnalyticsEvent("scroll_depth", {
+        scroll_percent: milestone,
+      });
+    }
+  });
+};
+
+window.addEventListener("scroll", trackScrollDepth, { passive: true });
+trackScrollDepth();
+
+[30, 60, 120].forEach((seconds) => {
+  window.setTimeout(() => {
+    trackAnalyticsEvent("time_on_page", {
+      seconds,
+    });
+  }, seconds * 1000);
 });
 
 let hasStartedContactForm = false;
@@ -122,7 +223,13 @@ document.querySelectorAll(".pipeline-viewer").forEach((viewer) => {
   };
 
   tabs.forEach((tab, index) => {
-    tab.addEventListener("click", () => activatePipeline(tab));
+    tab.addEventListener("click", () => {
+      activatePipeline(tab);
+      trackAnalyticsEvent("pipeline_tab_select", {
+        pipeline_name: getCleanText(tab),
+        pipeline_id: tab.dataset.pipelineTab,
+      });
+    });
 
     tab.addEventListener("keydown", (event) => {
       const keys = ["ArrowLeft", "ArrowRight", "Home", "End"];
@@ -138,6 +245,11 @@ document.querySelectorAll(".pipeline-viewer").forEach((viewer) => {
 
       tabs[nextIndex].focus();
       activatePipeline(tabs[nextIndex]);
+      trackAnalyticsEvent("pipeline_tab_select", {
+        pipeline_name: getCleanText(tabs[nextIndex]),
+        pipeline_id: tabs[nextIndex].dataset.pipelineTab,
+        interaction_type: "keyboard",
+      });
     });
   });
 });
