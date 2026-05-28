@@ -46,6 +46,39 @@ document.querySelectorAll(".nav-links a").forEach((link) => {
   });
 });
 
+document.querySelectorAll(".pipeline-flow li").forEach((step) => {
+  const title = step.querySelector("strong")?.textContent?.trim() || "pipeline step";
+
+  step.setAttribute("tabindex", "0");
+  step.setAttribute("role", "button");
+  step.setAttribute("aria-expanded", "false");
+  step.setAttribute("aria-label", `Expand ${title} step`);
+
+  const toggleStep = () => {
+    const flow = step.closest(".pipeline-flow");
+    const isExpanded = step.classList.contains("is-expanded");
+
+    flow.querySelectorAll("li").forEach((item) => {
+      item.classList.remove("is-expanded");
+      item.setAttribute("aria-expanded", "false");
+    });
+
+    if (!isExpanded) {
+      step.classList.add("is-expanded");
+      step.setAttribute("aria-expanded", "true");
+      step.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+  };
+
+  step.addEventListener("click", toggleStep);
+  step.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggleStep();
+    }
+  });
+});
+
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
