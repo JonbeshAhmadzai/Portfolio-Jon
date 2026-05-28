@@ -46,6 +46,61 @@ document.querySelectorAll(".nav-links a").forEach((link) => {
   });
 });
 
+const trackAnalyticsEvent = (eventName, params = {}) => {
+  if (typeof window.gtag === "function") {
+    window.gtag("event", eventName, params);
+  }
+};
+
+document.querySelectorAll("a[href]").forEach((link) => {
+  link.addEventListener("click", () => {
+    const href = link.getAttribute("href") || "";
+    const label = link.getAttribute("aria-label") || link.textContent.trim() || href;
+    const eventParams = {
+      link_text: label,
+      link_url: href,
+    };
+
+    if (href.includes("Jonbesh_ahmadzai_CV.pdf")) {
+      trackAnalyticsEvent("cv_pdf_open", eventParams);
+      return;
+    }
+
+    if (href.includes("github.com")) {
+      trackAnalyticsEvent(link.closest(".project-card") ? "project_github_click" : "github_profile_click", eventParams);
+      return;
+    }
+
+    if (href.includes("linkedin.com")) {
+      trackAnalyticsEvent("linkedin_click", eventParams);
+      return;
+    }
+
+    if (href.startsWith("mailto:")) {
+      trackAnalyticsEvent("email_click", eventParams);
+      return;
+    }
+
+    if (href.endsWith(".svg")) {
+      trackAnalyticsEvent("pipeline_diagram_open", eventParams);
+    }
+  });
+});
+
+let hasStartedContactForm = false;
+const contactForm = document.querySelector(".contact-form");
+
+contactForm?.addEventListener("focusin", () => {
+  if (!hasStartedContactForm) {
+    hasStartedContactForm = true;
+    trackAnalyticsEvent("contact_form_start");
+  }
+});
+
+contactForm?.addEventListener("submit", () => {
+  trackAnalyticsEvent("contact_form_submit");
+});
+
 document.querySelectorAll(".pipeline-viewer").forEach((viewer) => {
   const tabs = [...viewer.querySelectorAll("[data-pipeline-tab]")];
   const panels = [...viewer.querySelectorAll("[data-pipeline-panel]")];
