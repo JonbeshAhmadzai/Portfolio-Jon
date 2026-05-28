@@ -515,114 +515,131 @@
               <p class="eyebrow">Pipeline Diagrams</p>
               <h3>How the Systems Move Data</h3>
             </div>
-            <div class="diagram-grid">
-              <article class="diagram-card reveal">
-                <div class="diagram-head">
-                  <div>
-                    <span>Pipeline 1</span>
-                    <h4>Immovlan Real Estate ML Pipeline</h4>
-                  </div>
-                  <a href="assets/immovlan_pipeline.svg" target="_blank" rel="noopener">Open original diagram</a>
-                </div>
-                <ol class="pipeline-flow">
-                  <li>
-                    <strong>Scrape</strong>
-                    <p>Multi-threaded Immovlan collection across Belgian provinces.</p>
-                  </li>
-                  <li>
-                    <strong>Clean</strong>
-                    <p>Deduplicate listings, normalize fields, and prepare analysis-ready data.</p>
-                  </li>
-                  <li>
-                    <strong>Enrich</strong>
-                    <p>Geocode zip codes and calculate distance to Brussels, Antwerp, and Ghent.</p>
-                  </li>
-                  <li>
-                    <strong>Engineer</strong>
-                    <p>Create area-per-room, outdoor-space, land-use, and nearest-city features.</p>
-                  </li>
-                  <li>
-                    <strong>Model</strong>
-                    <p>Compare Linear Regression, Random Forest, XGBoost, LightGBM, and CatBoost.</p>
-                  </li>
-                  <li>
-                    <strong>Deploy</strong>
-                    <p>Serialize CatBoost and expose predictions through FastAPI, Docker, and Render.</p>
-                  </li>
-                </ol>
-              </article>
+            <div class="pipeline-viewer reveal">
+              <div class="pipeline-tabs" role="tablist" aria-label="Pipeline diagrams">
+                <button class="pipeline-tab is-active" id="pipeline-tab-immovlan" type="button" role="tab" aria-selected="true" aria-controls="pipeline-panel-immovlan" data-pipeline-tab="immovlan">
+                  <span>Pipeline 1</span>
+                  Immovlan ML
+                </button>
+                <button class="pipeline-tab" id="pipeline-tab-crop" type="button" role="tab" aria-selected="false" aria-controls="pipeline-panel-crop" data-pipeline-tab="crop">
+                  <span>Pipeline 2</span>
+                  Crop Classification
+                </button>
+                <button class="pipeline-tab" id="pipeline-tab-market" type="button" role="tab" aria-selected="false" aria-controls="pipeline-panel-market" data-pipeline-tab="market">
+                  <span>Pipeline 3</span>
+                  Market Watch Agent
+                </button>
+              </div>
 
-              <article class="diagram-card reveal">
-                <div class="diagram-head">
-                  <div>
-                    <span>Pipeline 2</span>
-                    <h4>Satellite Crop Classification Pipeline</h4>
+              <div class="pipeline-panels">
+                <article class="pipeline-panel is-active" id="pipeline-panel-immovlan" role="tabpanel" aria-labelledby="pipeline-tab-immovlan" data-pipeline-panel="immovlan">
+                  <div class="diagram-head">
+                    <div>
+                      <span>Pipeline 1</span>
+                      <h4>Immovlan Real Estate ML Pipeline</h4>
+                    </div>
+                    <a href="assets/immovlan_pipeline.svg" target="_blank" rel="noopener">Open original diagram</a>
                   </div>
-                  <a href="assets/crop_classification_pipeline.svg" target="_blank" rel="noopener">Open original diagram</a>
-                </div>
-                <ol class="pipeline-flow">
-                  <li>
-                    <strong>Query</strong>
-                    <p>Search Sentinel-2 L2A scenes through the Copernicus STAC catalogue.</p>
-                  </li>
-                  <li>
-                    <strong>Store</strong>
-                    <p>Download selected bands and persist imagery in Azure Blob Storage.</p>
-                  </li>
-                  <li>
-                    <strong>Mask</strong>
-                    <p>Apply scene-classification cloud masks before feature construction.</p>
-                  </li>
-                  <li>
-                    <strong>Composite</strong>
-                    <p>Build monthly median composites to reduce cloud and atmospheric noise.</p>
-                  </li>
-                  <li>
-                    <strong>Train</strong>
-                    <p>Combine bands with NDVI, NDWI, and NDBI into a 117-feature Random Forest model.</p>
-                  </li>
-                  <li>
-                    <strong>Export</strong>
-                    <p>Post-process predictions and export reclassified GeoTIFF crop maps.</p>
-                  </li>
-                </ol>
-              </article>
+                  <ol class="pipeline-flow">
+                    <li>
+                      <strong>Scrape</strong>
+                      <p>Multi-threaded Immovlan collection across Belgian provinces.</p>
+                    </li>
+                    <li>
+                      <strong>Clean</strong>
+                      <p>Deduplicate listings, normalize fields, and prepare analysis-ready data.</p>
+                    </li>
+                    <li>
+                      <strong>Enrich</strong>
+                      <p>Geocode zip codes and calculate distance to Brussels, Antwerp, and Ghent.</p>
+                    </li>
+                    <li>
+                      <strong>Engineer</strong>
+                      <p>Create area-per-room, outdoor-space, land-use, and nearest-city features.</p>
+                    </li>
+                    <li>
+                      <strong>Model</strong>
+                      <p>Compare Linear Regression, Random Forest, XGBoost, LightGBM, and CatBoost.</p>
+                    </li>
+                    <li>
+                      <strong>Deploy</strong>
+                      <p>Serialize CatBoost and expose predictions through FastAPI, Docker, and Render.</p>
+                    </li>
+                  </ol>
+                </article>
 
-              <article class="diagram-card reveal">
-                <div class="diagram-head">
-                  <div>
-                    <span>Pipeline 3</span>
-                    <h4>Market Watch Agent Pipeline</h4>
+                <article class="pipeline-panel" id="pipeline-panel-crop" role="tabpanel" aria-labelledby="pipeline-tab-crop" data-pipeline-panel="crop" hidden>
+                  <div class="diagram-head">
+                    <div>
+                      <span>Pipeline 2</span>
+                      <h4>Satellite Crop Classification Pipeline</h4>
+                    </div>
+                    <a href="assets/crop_classification_pipeline.svg" target="_blank" rel="noopener">Open original diagram</a>
                   </div>
-                  <a href="assets/market_watch_agent_pipeline.svg" target="_blank" rel="noopener">Open original diagram</a>
-                </div>
-                <ol class="pipeline-flow">
-                  <li>
-                    <strong>Collect</strong>
-                    <p>Scrape competitor banking product pages from monitored Belgian sources.</p>
-                  </li>
-                  <li>
-                    <strong>Normalize</strong>
-                    <p>Convert product data into structured records for reliable comparison.</p>
-                  </li>
-                  <li>
-                    <strong>Compare</strong>
-                    <p>Run JSON diffing against Azure-backed state from previous runs.</p>
-                  </li>
-                  <li>
-                    <strong>Classify</strong>
-                    <p>Use LLM APIs to classify detected product and rate changes.</p>
-                  </li>
-                  <li>
-                    <strong>Persist</strong>
-                    <p>Update Azure Blob Storage with the newest product state and change history.</p>
-                  </li>
-                  <li>
-                    <strong>Report</strong>
-                    <p>Produce structured competitive intelligence summaries for decision makers.</p>
-                  </li>
-                </ol>
-              </article>
+                  <ol class="pipeline-flow">
+                    <li>
+                      <strong>Query</strong>
+                      <p>Search Sentinel-2 L2A scenes through the Copernicus STAC catalogue.</p>
+                    </li>
+                    <li>
+                      <strong>Store</strong>
+                      <p>Download selected bands and persist imagery in Azure Blob Storage.</p>
+                    </li>
+                    <li>
+                      <strong>Mask</strong>
+                      <p>Apply scene-classification cloud masks before feature construction.</p>
+                    </li>
+                    <li>
+                      <strong>Composite</strong>
+                      <p>Build monthly median composites to reduce cloud and atmospheric noise.</p>
+                    </li>
+                    <li>
+                      <strong>Train</strong>
+                      <p>Combine bands with NDVI, NDWI, and NDBI into a 117-feature Random Forest model.</p>
+                    </li>
+                    <li>
+                      <strong>Export</strong>
+                      <p>Post-process predictions and export reclassified GeoTIFF crop maps.</p>
+                    </li>
+                  </ol>
+                </article>
+
+                <article class="pipeline-panel" id="pipeline-panel-market" role="tabpanel" aria-labelledby="pipeline-tab-market" data-pipeline-panel="market" hidden>
+                  <div class="diagram-head">
+                    <div>
+                      <span>Pipeline 3</span>
+                      <h4>Market Watch Agent Pipeline</h4>
+                    </div>
+                    <a href="assets/market_watch_agent_pipeline.svg" target="_blank" rel="noopener">Open original diagram</a>
+                  </div>
+                  <ol class="pipeline-flow">
+                    <li>
+                      <strong>Collect</strong>
+                      <p>Scrape competitor banking product pages from monitored Belgian sources.</p>
+                    </li>
+                    <li>
+                      <strong>Normalize</strong>
+                      <p>Convert product data into structured records for reliable comparison.</p>
+                    </li>
+                    <li>
+                      <strong>Compare</strong>
+                      <p>Run JSON diffing against Azure-backed state from previous runs.</p>
+                    </li>
+                    <li>
+                      <strong>Classify</strong>
+                      <p>Use LLM APIs to classify detected product and rate changes.</p>
+                    </li>
+                    <li>
+                      <strong>Persist</strong>
+                      <p>Update Azure Blob Storage with the newest product state and change history.</p>
+                    </li>
+                    <li>
+                      <strong>Report</strong>
+                      <p>Produce structured competitive intelligence summaries for decision makers.</p>
+                    </li>
+                  </ol>
+                </article>
+              </div>
             </div>
 
             <div class="subsection-heading reveal">

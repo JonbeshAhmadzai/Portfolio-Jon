@@ -46,44 +46,44 @@ document.querySelectorAll(".nav-links a").forEach((link) => {
   });
 });
 
-document.querySelectorAll(".diagram-card").forEach((card) => {
-  const title = card.querySelector("h4")?.textContent?.trim() || "pipeline card";
-  const diagramLink = card.querySelector(".diagram-head a");
+document.querySelectorAll(".pipeline-viewer").forEach((viewer) => {
+  const tabs = [...viewer.querySelectorAll("[data-pipeline-tab]")];
+  const panels = [...viewer.querySelectorAll("[data-pipeline-panel]")];
 
-  card.setAttribute("tabindex", "0");
-  card.setAttribute("role", "button");
-  card.setAttribute("aria-expanded", "false");
-  card.setAttribute("aria-label", `Expand ${title}`);
+  const activatePipeline = (activeTab) => {
+    const target = activeTab.dataset.pipelineTab;
 
-  diagramLink?.addEventListener("click", (event) => event.stopPropagation());
-
-  const toggleCard = () => {
-    const grid = card.closest(".diagram-grid");
-    const isExpanded = card.classList.contains("is-expanded");
-
-    grid.querySelectorAll(".diagram-card").forEach((item) => {
-      item.classList.remove("is-expanded");
-      item.setAttribute("aria-expanded", "false");
+    tabs.forEach((tab) => {
+      const isActive = tab === activeTab;
+      tab.classList.toggle("is-active", isActive);
+      tab.setAttribute("aria-selected", String(isActive));
     });
 
-    if (!isExpanded) {
-      card.classList.add("is-expanded");
-      card.setAttribute("aria-expanded", "true");
-      card.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
+    panels.forEach((panel) => {
+      const isActive = panel.dataset.pipelinePanel === target;
+      panel.classList.toggle("is-active", isActive);
+      panel.hidden = !isActive;
+    });
   };
 
-  card.addEventListener("click", (event) => {
-    if (!event.target.closest("a")) {
-      toggleCard();
-    }
-  });
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => activatePipeline(tab));
 
-  card.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" || event.key === " ") {
+    tab.addEventListener("keydown", (event) => {
+      const keys = ["ArrowLeft", "ArrowRight", "Home", "End"];
+      if (!keys.includes(event.key)) return;
+
       event.preventDefault();
-      toggleCard();
-    }
+
+      let nextIndex = index;
+      if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+      if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+      if (event.key === "Home") nextIndex = 0;
+      if (event.key === "End") nextIndex = tabs.length - 1;
+
+      tabs[nextIndex].focus();
+      activatePipeline(tabs[nextIndex]);
+    });
   });
 });
 
