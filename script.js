@@ -54,7 +54,7 @@ const trackAnalyticsEvent = (eventName, params = {}) => {
 
 const getCleanText = (element) => element?.textContent?.replace(/\s+/g, " ").trim() || "";
 const getProjectName = (element) => getCleanText(element.closest(".project-card")?.querySelector("h3"));
-const siteVersion = "portfolio-2026-05-28";
+const siteVersion = "portfolio-2026-07-14";
 
 const getEstimatedDeviceType = () => {
   const width = window.innerWidth;
